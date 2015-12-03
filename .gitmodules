@@ -1,0 +1,3 @@
+[submodule "cdeeco"]
+	path = cdeeco
+	url = https://github.com/d3scomp/CDEECo.git
