@@ -1,9 +1,9 @@
 #ifndef SPEED_EXCHANGE_H
 #define SPEED_EXCHANGE_H
 
-#include "cdeeco/Component.h"
-#include "cdeeco/Ensemble.h"
-#include "cdeeco/KnowledgeCache.h"
+#include <cdeeco/Component.h>
+#include <cdeeco/Ensemble.h>
+#include <cdeeco/KnowledgeCache.h>
 
 #include "ICS.h"
 #include "Vehicle.h"
