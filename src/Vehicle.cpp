@@ -50,15 +50,12 @@ namespace Vehicle {
 	}
 
 	Distance UpdateCrossingDistance::run(const Knowledge in) {
-		return getCrossingDistance(component.getPosition(), in.crossingId);
+		return getCrossingDistance(component.vehicleInterface.getPosition(), in.crossingId);
 	}
 
 	SetSpeed::SetSpeed(auto &component): component(component) {
 		// TODO: Period
 		PeriodicTask(1000, component);
-
-		// Reference to component
-		auto &component;
 	}
 
 	void SetSpeed::run(const Knowledge in) {

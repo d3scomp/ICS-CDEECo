@@ -24,6 +24,8 @@
  * Vehicle component
  */
 namespace Vehicle {
+	class Component;
+	
 	/**
 	 * Vehicle knowledge
 	 */
@@ -134,7 +136,7 @@ namespace Vehicle {
 		Distance run(const Knowledge in);
 		
 		// Reference to component
-		CDEECO::Component<Knowledge> &component;
+		Component &component;
 	};
 
 	/**
