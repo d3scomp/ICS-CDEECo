@@ -141,9 +141,11 @@ init:
 #	mkdir -p $(BUILD_DIR)/$(FREERTOS_DIR)/Source/portable/GCC/ARM_CM4F
 #	mkdir -p ${BUILD_DIR}/$(CMSIS_DEVICE_DIR)/Source/Templates/TrueSTUDIO
 
+${CDEECO_LIB}: 
+	$(MAKE) -C ${CDEECO_DIR}
 	
-$(BUILD_DIR)/$(PROJ_ICS_NAME).elf: $(ICS_OBJS)
-	$(CXX) $(LDFLAGS) -o "$@" $(EXAMPLE_OBJS) $(CDEECO_LIB}
+$(BUILD_DIR)/$(PROJ_ICS_NAME).elf: $(ICS_OBJS) ${CDEECO_LIB}
+	$(CXX) $(LDFLAGS) -o "$@" $(ICS_OBJS) ${CDEECO_LIB}
 
 %.hex: %.elf
 	${OBJCOPY} -O ihex "$<" "$@"
@@ -151,6 +153,8 @@ $(BUILD_DIR)/$(PROJ_ICS_NAME).elf: $(ICS_OBJS)
 
 clean:
 	rm -rf build
+	$(MAKE) -C ${CDEECO_DIR} clean
+	
 	
 openocd:
 	${OPENOCD} -f interface/stlink-v2.cfg -f target/stm32f4x_stlink.cfg
