@@ -34,6 +34,7 @@ enum Mode {
 	Automatic, Manual
 };
 
+
 const long LATENCY_THRESHOLD_MS = 20;
 
 /**
@@ -48,7 +49,7 @@ public:
 	
 	void setSpeed(float speed);
 	bool isInteligentModeSupported();
-//	Position getPosition();
+	Position getPosition();
 };
 
 /**
@@ -57,5 +58,7 @@ public:
  * This time reference is used to judge data latency. For example GPS time can be used for this purpose.
  */
 Time GetCurrentTimeMs();
+
+Distance getCrossingDistance(VehicleInterface::Position position, CrossingId id);
 
 #endif // ICS_UTILS_H

@@ -14,3 +14,7 @@ Time GetCurrentTimeMs() {
 	// TODO: Implement this
 	return 0;
 }
+
+Distance getCrossingDistance(VehicleInterface::Position position, CrossingId) {
+	return 0;
+}
