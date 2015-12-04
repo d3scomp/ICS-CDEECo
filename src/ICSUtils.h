@@ -46,10 +46,9 @@ public:
 		double lat;
 	} Position;
 	
-	void setSpeed(float speed) {};
-	bool isInteligentModeSupported() { return true;};
-	
-	Position getPosition() {return {42, 43};};
+	void setSpeed(float speed);
+	bool isInteligentModeSupported();
+//	Position getPosition();
 };
 
 /**
@@ -57,9 +56,6 @@ public:
  *
  * This time reference is used to judge data latency. For example GPS time can be used for this purpose.
  */
-Time GetCurrentTimeMs() {
-	// TODO: Implement this
-	return 0;
-}
+Time GetCurrentTimeMs();
 
 #endif // ICS_UTILS_H

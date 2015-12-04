@@ -18,6 +18,7 @@ OPENOCD=openocd
 # Example project
 SRCS += ${SRC_DIR}/SpeedExchange.cpp
 SRCS += ${SRC_DIR}/MrfRadio.cpp
+SRCS += ${SRC_DIR}/ICSUtils.cpp
 
 ICS_SRCS += ${SRCS}
 ICS_SRCS += ${SRC_DIR}/ICS.cpp
