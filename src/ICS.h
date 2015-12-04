@@ -84,12 +84,12 @@ namespace ICS {
 	 * Checks whenever all vehicles in the crossing range support remote operation
 	 * and have good enough latency in order to run the crossing in smart mode.
 	 */
-	class CheckOperational: public CDEECO::PeriodicTask<Knowledge, bool> {
+	class CheckOperational: public CDEECO::PeriodicTask<Knowledge, Mode> {
 	public:
 		CheckOperational(auto &component);
 
 	private:
-		bool run(const Knowledge in);
+		Mode run(const Knowledge in);
 		std::set<VehicleId> getOutOfBandRegisteredVehicles();
 	};
 

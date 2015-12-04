@@ -8,7 +8,7 @@
  * \author Vladimír Matěna <vlada@mattty.cz>
  */
 
-#include "../ics/MrfRadio.h"
+#include "MrfRadio.h"
 
 MrfRadio::MrfRadio(uint8_t channel, uint16_t panId, uint16_t sourceAddress) {
 	mrf.setRecvListener(receiverListenerStatic, this);

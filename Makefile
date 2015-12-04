@@ -5,6 +5,7 @@ PROJ_VEHICLE_NAME=vehicle
 BUILD_DIR=build
 SRC_DIR=src
 CDEECO_DIR=cdeeco
+CDEECO_LIB=${CDEECO_DIR}/build/cdeeco++.a
 
 DRIVERS_DIR=${CDEECO_DIR}/src/drivers
 FREERTOS_DIR=${CDEECO_DIR}/FreeRTOS
@@ -25,12 +26,6 @@ ICS_SRCS += ${SRC_DIR}/ics_app.cpp
 VEHICLE_SRCS += ${SRCS}
 VEHICLE_SRCS += ${SRC_DIR}/Vehicle.cpp
 VEHICLE_SRCS += ${SRC_DIR}/vehicle_app.cpp
-
-# System
-SRCS +=	${SRC_DIR}/main.cpp
-
-# Framework
-SRCS += $(CDEECO_DIR)/Radio.cpp
 
 # FreeRTOS wrappers
 #SRCS += $(WRAPPERS_DIR)/FreeRTOSMutex.cpp
@@ -98,24 +93,24 @@ CFLAGS += -D USE_STDPERIPH_DRIVER -D STM32F40_41xxx -D HSI_VALUE=16000000ul -D H
 
 CPPFLAGS = $(CFLAGS) -fno-exceptions -fno-rtti -std=c++1y
 
-LDFLAGS = -Tstm32_flash.ld -Wl,-Map,$(BUILD_DIR)/cdeeco++.map $(CFLAGS)
+LDFLAGS = -T${CDEECO_DIR}/stm32_flash.ld -Wl,-Map,$(BUILD_DIR)/cdeeco++.map $(CFLAGS)
 
 # Add startup file to build
-OBJS = $(patsubst %.c,build/%.o,$(SRCS))
-OBJS := $(patsubst %.cpp,build/%.o,$(OBJS))
-OBJS := $(patsubst %.s,build/%.o,$(OBJS))
+ICS_OBJS = $(patsubst %.c,build/%.o,$(ICS_SRCS))
+ICS_OBJS := $(patsubst %.cpp,build/%.o,$(ICS_OBJS))
+ICS_OBJS := $(patsubst %.s,build/%.o,$(ICS_OBJS))
 
-DEPS = $(patsubst %.c,build/%.d,$(SRCS))
-DEPS := $(patsubst %.cpp,build/%.d,$(DEPS))
-DEPS := $(patsubst %.s,,$(DEPS))
+ICS_DEPS = $(patsubst %.c,build/%.d,$(ICS_SRCS))
+ICS_DEPS := $(patsubst %.cpp,build/%.d,$(ICS_DEPS))
+ICS_DEPS := $(patsubst %.s,,$(ICS_DEPS))
 
-EXAMPLE_OBJS = $(patsubst %.c,build/%.o,$(EXAMPLE_SRCS))
-EXAMPLE_OBJS := $(patsubst %.cpp,build/%.o,$(EXAMPLE_OBJS))
-EXAMPLE_OBJS := $(patsubst %.s,build/%.o,$(EXAMPLE_OBJS))
+VEHICLE_OBJS = $(patsubst %.c,build/%.o,$(VEHICLE_SRCS))
+VEHICLE_OBJS := $(patsubst %.cpp,build/%.o,$(VEHICLE_OBJS))
+VEHICLE_OBJS := $(patsubst %.s,build/%.o,$(VEHICLE_OBJS))
 
-EXAMPLE_DEPS = $(patsubst %.c,build/%.d,$(EXAMPLE_SRCS))
-EXAMPLE_DEPS := $(patsubst %.cpp,build/%.d,$(EXAMPLE_DEPS))
-EXAMPLE_DEPS := $(patsubst %.s,,$(EXAMPLE_DEPS))
+VEHICLE_DEPS = $(patsubst %.c,build/%.d,$(VEHICLE_SRCS))
+VEHICLE_DEPS := $(patsubst %.cpp,build/%.d,$(VEHICLE_DEPS))
+VEHICLE_DEPS := $(patsubst %.s,,$(VEHICLE_DEPS))
 
 
 build/%.o: %.c
@@ -132,27 +127,25 @@ build/%.dep: %.cpp
 
 .PHONY: init all
 
-all: init $(BUILD_DIR)/$(PROJ_NAME).a $(BUILD_DIR)/$(PROJ_EXAMPLE_NAME).hex
+all: init $(BUILD_DIR)/$(PROJ_ICS_NAME).hex $(BUILD_DIR)/$(PROJ_VEHICLE_NAME).hex
 
 init:
-	mkdir -p $(BUILD_DIR)/$(SRC_DIR)
-	mkdir -p $(BUILD_DIR)/$(SRC_DIR)/drivers
-	mkdir -p $(BUILD_DIR)/$(SRC_DIR)/cdeeco
-	mkdir -p $(BUILD_DIR)/$(SRC_DIR)/wrappers
-	mkdir -p $(BUILD_DIR)/$(EXAMPLE_SRC_DIR)
-	mkdir -p $(BUILD_DIR)/$(PERIPH_DIR)/src
-	mkdir -p $(BUILD_DIR)/$(FREERTOS_DIR)/Source
-	mkdir -p $(BUILD_DIR)/$(FREERTOS_DIR)/Source/portable/MemMang
-	mkdir -p $(BUILD_DIR)/$(FREERTOS_DIR)/Source/portable/GCC/ARM_CM4F
-	mkdir -p ${BUILD_DIR}/$(CMSIS_DEVICE_DIR)/Source/Templates/TrueSTUDIO
+#	mkdir -p $(BUILD_DIR)/$(SRC_DIR)
+#	mkdir -p $(BUILD_DIR)/$(SRC_DIR)/drivers
+#	mkdir -p $(BUILD_DIR)/$(SRC_DIR)/cdeeco
+#	mkdir -p $(BUILD_DIR)/$(SRC_DIR)/wrappers
+#	mkdir -p $(BUILD_DIR)/$(EXAMPLE_SRC_DIR)
+#	mkdir -p $(BUILD_DIR)/$(PERIPH_DIR)/src
+#	mkdir -p $(BUILD_DIR)/$(FREERTOS_DIR)/Source
+#	mkdir -p $(BUILD_DIR)/$(FREERTOS_DIR)/Source/portable/MemMang
+#	mkdir -p $(BUILD_DIR)/$(FREERTOS_DIR)/Source/portable/GCC/ARM_CM4F
+#	mkdir -p ${BUILD_DIR}/$(CMSIS_DEVICE_DIR)/Source/Templates/TrueSTUDIO
 
-$(BUILD_DIR)/$(PROJ_NAME).a: $(OBJS)
-	${AR} cr "$@" $(OBJS)
 	
-$(BUILD_DIR)/$(PROJ_EXAMPLE_NAME).elf: $(EXAMPLE_OBJS)
-	$(CXX) $(LDFLAGS) -o "$@" $(EXAMPLE_OBJS) $(BUILD_DIR)/$(PROJ_NAME).a
+$(BUILD_DIR)/$(PROJ_ICS_NAME).elf: $(ICS_OBJS)
+	$(CXX) $(LDFLAGS) -o "$@" $(EXAMPLE_OBJS) $(CDEECO_LIB}
 
-$(BUILD_DIR)/$(PROJ_EXAMPLE_NAME).hex: $(BUILD_DIR)/$(PROJ_EXAMPLE_NAME).elf
+%.hex: %.elf
 	${OBJCOPY} -O ihex "$<" "$@"
 	${SIZE} --format=berkeley "$@"
 
