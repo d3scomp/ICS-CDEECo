@@ -148,6 +148,9 @@ namespace Vehicle {
 
 	private:
 		void run(const Knowledge in);
+		
+		// Reference to component
+		Component &component;
 	};
 
 	/**
