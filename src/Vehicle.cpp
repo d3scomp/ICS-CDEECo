@@ -12,18 +12,16 @@ namespace Vehicle {
 		knowledge.approachDirection = NORTH_EAST;
 	}
 
-	StoreCurrentTime::StoreCurrentTime(auto &component) {
-		// TODO: Period
-		PeriodicTask(10, component, component.knowledge.time);
+	StoreCurrentTime::StoreCurrentTime(auto &component): PeriodicTask(10, component, component.knowledge.time) {
+			// TODO: Period
 	}
 
 	Time StoreCurrentTime::run(const Knowledge in) {
 		return GetCurrentTimeMs();
 	}
 
-	Monitor::Monitor(auto &component) {
+	Monitor::Monitor(auto &component): PeriodicTask(10, component, component.knowledge.mode) {
 		// TODO: Period
-		Monitor(10, component, component.knowledge.mode);
 	}
 
 	Mode Monitor::run(const Knowledge in) {
@@ -34,9 +32,8 @@ namespace Vehicle {
 		}
 	}
 
-	PlanRoute::PlanRoute(auto &component) {
+	PlanRoute::PlanRoute(auto &component): PeriodicTask(1000, component, component.knowledge.crossingId) {
 		// TODO: Period
-		PeriodicTask(1000, component, component.knowledge.crossingId);
 	}
 
 	CrossingId PlanRoute::run(const Knowledge in) {
@@ -44,18 +41,17 @@ namespace Vehicle {
 		return 42;
 	}
 
-	UpdateCrossingDistance::UpdateCrossingDistance(auto &component): component(component) {
+	UpdateCrossingDistance::UpdateCrossingDistance(auto &component): component(component),
+		PeriodicTask(1000, component, component.knowledge.crossingDistance) { 
 		// TODO: Period
-		PeriodicTask(1000, component, component.knowledge.crossingDistance);
 	}
 
 	Distance UpdateCrossingDistance::run(const Knowledge in) {
 		return getCrossingDistance(component.vehicleInterface.getPosition(), in.crossingId);
 	}
 
-	SetSpeed::SetSpeed(auto &component): component(component) {
+	SetSpeed::SetSpeed(auto &component): component(component), PeriodicTask(1000, component) {
 		// TODO: Period
-		PeriodicTask(1000, component);
 	}
 
 	void SetSpeed::run(const Knowledge in) {
