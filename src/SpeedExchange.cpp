@@ -4,8 +4,7 @@
 namespace SpeedExchange {
 	Ensemble::Ensemble(CDEECO::Component<ICS::Knowledge> &coordinator,
 			CDEECO::KnowledgeLibrary<Vehicle::Knowledge> &library) :
-			EnsembleType(&coordinator, &coordinator.knowledge.vehicles, &library,
-					PERIOD_MS) {
+			EnsembleType(&coordinator, &coordinator.knowledge, &library, PERIOD_MS) {
 	}
 
 	Ensemble::Ensemble(CDEECO::Component<Vehicle::Knowledge> &member,
@@ -21,19 +20,16 @@ namespace SpeedExchange {
 		return memberKnowledge.crossingId == coordKnowledge.id && memberKnowledge.crossingDistance < 50;
 	}
 
-	Vehicle::Knowledge* Ensemble::memberToCoordMap(const ICS::Knowledge coord,
+	ICS::Knowledge Ensemble::memberToCoordMap(const ICS::Knowledge coord,
 			const CDEECO::Id memberId, const Vehicle::Knowledge memberKnowledge) {
-		// Copy vehicle array
-		Vehicle::Knowledge vehicles[] = new Vehicle::Knowledge[ICS::MAX_VEHICLES];
-		memcpy(vehicles, coord.vehicles,
-				sizeof(Vehicle::Knowledge) * ICS::MAX_VEHICLES);
-
+		ICS::Knowledge ics = coord;
+				
 		// Add info about new vehicle
 		bool stored = false;
 		// Try to update existing record for vehicle
 		for (int i = 0; i < ICS::MAX_VEHICLES; ++i) {
-			if (vehicles[i].id == memberKnowledge.id) {
-				vehicles[i] = memberKnowledge;
+			if (ics.vehicles[i].id == memberKnowledge.id) {
+				ics.vehicles[i] = memberKnowledge;
 				stored = true;
 				break;
 			}
@@ -41,8 +37,8 @@ namespace SpeedExchange {
 		// Try to store record in new field
 		if (!stored) {
 			for (int i = 0; i < ICS::MAX_VEHICLES; ++i) {
-				if (vehicles[i].id == 0) {
-					vehicles[i] = memberKnowledge;
+				if (ics.vehicles[i].id == 0) {
+					ics.vehicles[i] = memberKnowledge;
 					stored = true;
 					break;
 				}
@@ -53,7 +49,7 @@ namespace SpeedExchange {
 			// TODO: Report error, we were not able to store the record
 		}
 
-		return vehicles;
+		return coord;
 	}
 
 	Speed Ensemble::coordToMemberMap(const Vehicle::Knowledge member,
@@ -66,6 +62,6 @@ namespace SpeedExchange {
 		}
 
 		// Set some value when ICS has not yet set the desired arrival time for the vehicle
-		return {0, 0, std::numeric_limits<Speed>::max()};
+		return std::numeric_limits<Speed>::max();
 	}
 }
