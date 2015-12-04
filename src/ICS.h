@@ -36,6 +36,14 @@ namespace ICS {
 			VehicleId id;
 			Time time;
 		} SpeedInfo;
+		
+		typedef struct {
+			Vehicle::Knowledge value[MAX_VEHICLES];
+		} Vehicles;
+		
+		typedef struct {
+			SpeedInfo speeds[MAX_VEHICLES];
+		} SpeedInfos;
 
 		/**
 		 * Crossing id
@@ -59,12 +67,12 @@ namespace ICS {
 		 *
 		 * Vehicles with id = 0 are considered invalid and should be ignored
 		 */
-		Vehicle::Knowledge vehicles[MAX_VEHICLES];
+		Vehicles vehicles;
 
 		/**
 		 * Desired speeds for vehicles
 		 */
-		SpeedInfo speeds[MAX_VEHICLES];
+		SpeedInfos speedInfos;
 	};
 
 	/**
@@ -96,23 +104,23 @@ namespace ICS {
 	/**
 	 * Remove vehicles that already left the crossing
 	 */
-	class RemoveOldVehicles: public CDEECO::PeriodicTask<Knowledge, Vehicle::Knowledge*> {
+	class RemoveOldVehicles: public CDEECO::PeriodicTask<Knowledge, Knowledge::Vehicles> {
 	public:
 		RemoveOldVehicles(auto &component);
 
 	private:
-		Vehicle::Knowledge* run(const Knowledge in);
+		Knowledge::Vehicles run(const Knowledge in);
 	};
 
 	/**
 	 * Schedules vehicles speeds to optimize crossing throughput
 	 */
-	class ScheduleVehicles: public CDEECO::PeriodicTask<Knowledge, Knowledge::SpeedInfo*> {
+	class ScheduleVehicles: public CDEECO::PeriodicTask<Knowledge, Knowledge::SpeedInfos> {
 	public:
 		ScheduleVehicles(auto &component);
 
 	private:
-		Knowledge::SpeedInfo* run(const Knowledge in);
+		Knowledge::SpeedInfos run(const Knowledge in);
 	};
 
 	/**

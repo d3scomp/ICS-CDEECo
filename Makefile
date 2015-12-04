@@ -130,7 +130,7 @@ build/%.dep: %.cpp
 all: init $(BUILD_DIR)/$(PROJ_ICS_NAME).hex $(BUILD_DIR)/$(PROJ_VEHICLE_NAME).hex
 
 init:
-#	mkdir -p $(BUILD_DIR)/$(SRC_DIR)
+	mkdir -p $(BUILD_DIR)/$(SRC_DIR)
 #	mkdir -p $(BUILD_DIR)/$(SRC_DIR)/drivers
 #	mkdir -p $(BUILD_DIR)/$(SRC_DIR)/cdeeco
 #	mkdir -p $(BUILD_DIR)/$(SRC_DIR)/wrappers

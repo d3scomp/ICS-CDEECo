@@ -34,7 +34,7 @@ namespace ICS {
 		// Check if there are vehicles that are not registered by the system
 		std::set<VehicleId> outOfBandVehicles = getOutOfBandRegisteredVehicles();
 		for(unsigned int i = 0; i < MAX_VEHICLES; ++i) {
-			outOfBandVehicles.erase(in.vehicles[i].id);
+			outOfBandVehicles.erase(in.vehicles.value[i].id);
 		}
 		if(!outOfBandVehicles.empty()) {
 			return Mode::Manual;
@@ -42,14 +42,14 @@ namespace ICS {
 
 		// Check if there are unsupported vehicles in the system
 		for(unsigned int i = 0; i < MAX_VEHICLES; ++i) {
-			if(!in.vehicles[i].mode == Mode::Automatic) {
+			if(!in.vehicles.value[i].mode == Mode::Automatic) {
 				return Mode::Manual;
 			}
 		}
 
 		// Check if there are vehicles with high latency in the system
 		for(unsigned int i = 0; i < MAX_VEHICLES; ++i) {
-			Vehicle::Knowledge vehicle = in.vehicles[i];
+			Vehicle::Knowledge vehicle = in.vehicles.value[i];
 
 			if(vehicle.id != 0 && vehicle.crossingDistance != 0 &&
 					std::abs(GetCurrentTimeMs() - vehicle.time) > MAX_LATENCY_MS) {
@@ -60,54 +60,52 @@ namespace ICS {
 		return Mode::Automatic;
 	}
 
-	RemoveOldVehicles::RemoveOldVehicles(auto &component) {
+	RemoveOldVehicles::RemoveOldVehicles(auto &component):
 		// TODO: Period
-		PeriodicTask(1000, component, component.knowledge.vehicles);
+		PeriodicTask(1000, component, component.knowledge.vehicles) {
 	}
 
-	Vehicle::Knowledge* RemoveOldVehicles::run(const Knowledge in) {
+	Knowledge::Vehicles RemoveOldVehicles::run(const Knowledge in) {
 		// Copy live vehicles to new array
-		Vehicle::Knowledge vehicles[] = new Vehicle::Knowledge[MAX_VEHICLES];
+		Knowledge::Vehicles vehicles;
 		int used = 0;
 		for(int i = 0; i < MAX_VEHICLES; ++i) {
-			Vehicle::Knowledge vehicle = in.vehicles[i];
+			Vehicle::Knowledge vehicle = in.vehicles.value[i];
 			if(vehicle.id != 0 && vehicle.crossingDistance != 0) {
-				vehicles[used++] = vehicle;
+				vehicles.value[used++] = vehicle;
 			}
 		}
 
 		// Fill the remaining space with invalid entries
 		for(; used < MAX_VEHICLES; ++used) {
-			vehicles[used].id = 0;
+			vehicles.value[used].id = 0;
 		}
+		
+		return vehicles;
 	}
 
-	ScheduleVehicles::ScheduleVehicles(auto &component) {
+	ScheduleVehicles::ScheduleVehicles(auto &component):
 		// TODO: Period
-		PeriodicTask(2000, component, component.knowledge.speeds);
+		PeriodicTask(2000, component, component.knowledge.speedInfos) {
 	}
 
-	Knowledge::SpeedInfo* ScheduleVehicles::run(const Knowledge in) {
-		// Arrival times from last schedule
-		const Speed inSpeeds[MAX_VEHICLES] = in.speeds;
-		// Current information about vehicles
-		const Vehicle::Knowledge inVehicleData[MAX_VEHICLES] = in.vehicles;
+	Knowledge::SpeedInfos ScheduleVehicles::run(const Knowledge in) {
 		// New schedule to be computed
-		Knowledge::SpeedInfo outSpeeds[] = new Knowledge::SpeedInfo[MAX_VEHICLES];
+		Knowledge::SpeedInfos outSpeeds;
 
 		/*
 		 * TODO: Compute new schedule, take into account current schedule,
 		 * conflicting directions and arrival time estimates.
 		 *
-		 * outSPeeds = schedule(inSpeeds, inVehicleData);
+		 * outSPeeds = schedule(in.Speeds, in.VehiclesData);
 		 */
 
 		return outSpeeds;
 	}
 
-	StoreCurrentTime::StoreCurrentTime(auto &component) {
+	StoreCurrentTime::StoreCurrentTime(auto &component):
 		// TODO: Period
-		PeriodicTask(10, component, component.knowledge.time);
+		PeriodicTask(10, component, component.knowledge.time) {
 	}
 
 	Time StoreCurrentTime::run(const Knowledge in) {
