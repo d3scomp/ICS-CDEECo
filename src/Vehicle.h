@@ -72,7 +72,7 @@ namespace Vehicle {
 		/**
 		 * Speed assigned by ICS
 		 */
-		Speed sped;
+		Speed speed;
 
 		/**
 		 * Speed timestamp created by ICS
@@ -101,7 +101,7 @@ namespace Vehicle {
 	 *
 	 * Checks latency of input data and ICS operational state
 	 */
-	class Monitor: public CDEECO::PeriodicTask<Knowledge, Knowledge> {
+	class Monitor: public CDEECO::PeriodicTask<Knowledge, Mode> {
 	public:
 		Monitor(auto &component);
 
