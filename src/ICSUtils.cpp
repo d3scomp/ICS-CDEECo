@@ -6,9 +6,9 @@ bool VehicleInterface::isInteligentModeSupported() {
 	return true;
 };
 
-/*Position VehicleInterface::getPosition() {
+VehicleInterface::Position VehicleInterface::getPosition() {
 	return {42, 43};
-};*/
+};
 
 Time GetCurrentTimeMs() {
 	// TODO: Implement this

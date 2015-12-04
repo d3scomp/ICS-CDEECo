@@ -41,8 +41,8 @@ namespace Vehicle {
 		return 42;
 	}
 
-	UpdateCrossingDistance::UpdateCrossingDistance(auto &component): component(component),
-		PeriodicTask(1000, component, component.knowledge.crossingDistance) { 
+	UpdateCrossingDistance::UpdateCrossingDistance(auto &component): 
+		PeriodicTask(1000, component, component.knowledge.crossingDistance), component(component) { 
 		// TODO: Period
 	}
 
@@ -50,7 +50,8 @@ namespace Vehicle {
 		return getCrossingDistance(component.vehicleInterface.getPosition(), in.crossingId);
 	}
 
-	SetSpeed::SetSpeed(auto &component): component(component), PeriodicTask(1000, component) {
+	SetSpeed::SetSpeed(auto &component): PeriodicTask(1000, component),
+		component(component) {
 		// TODO: Period
 	}
 

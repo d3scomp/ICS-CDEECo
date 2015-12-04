@@ -132,24 +132,15 @@ all: init $(BUILD_DIR)/$(PROJ_ICS_NAME).hex $(BUILD_DIR)/$(PROJ_VEHICLE_NAME).he
 
 init:
 	mkdir -p $(BUILD_DIR)/$(SRC_DIR)
-#	mkdir -p $(BUILD_DIR)/$(SRC_DIR)/drivers
-#	mkdir -p $(BUILD_DIR)/$(SRC_DIR)/cdeeco
-#	mkdir -p $(BUILD_DIR)/$(SRC_DIR)/wrappers
-#	mkdir -p $(BUILD_DIR)/$(EXAMPLE_SRC_DIR)
-#	mkdir -p $(BUILD_DIR)/$(PERIPH_DIR)/src
-#	mkdir -p $(BUILD_DIR)/$(FREERTOS_DIR)/Source
-#	mkdir -p $(BUILD_DIR)/$(FREERTOS_DIR)/Source/portable/MemMang
-#	mkdir -p $(BUILD_DIR)/$(FREERTOS_DIR)/Source/portable/GCC/ARM_CM4F
-#	mkdir -p ${BUILD_DIR}/$(CMSIS_DEVICE_DIR)/Source/Templates/TrueSTUDIO
 
 ${CDEECO_LIB}: 
 	$(MAKE) -C ${CDEECO_DIR}
 	
 $(BUILD_DIR)/$(PROJ_ICS_NAME).elf: $(ICS_OBJS) ${CDEECO_LIB}
-	$(CXX) $(LDFLAGS) -o "$@" $(ICS_OBJS) ${CDEECO_LIB}
+	$(CXX) $(LDFLAGS) -o "$@" $?
 	
 $(BUILD_DIR)/$(PROJ_VEHICLE_NAME).elf: $(VEHICLE_OBJS) ${CDEECO_LIB}
-	$(CXX) $(LDFLAGS) -o "$@" "$<"
+	$(CXX) $(LDFLAGS) -o "$@" $?
 
 %.hex: %.elf
 	${OBJCOPY} -O ihex "$<" "$@"
