@@ -41,9 +41,15 @@ const long LATENCY_THRESHOLD_MS = 20;
  */
 class VehicleInterface {
 public:
+	typedef struct {
+		double log;
+		double lat;
+	} Position;
+	
 	void setSpeed(float speed) {};
 	bool isInteligentModeSupported() { return true;};
-	struct {double log; double lat;} getPosition() {return {42, 43};};
+	
+	Position getPosition() {return {42, 43};};
 };
 
 /**
