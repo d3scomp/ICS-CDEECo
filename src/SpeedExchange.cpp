@@ -28,8 +28,8 @@ namespace SpeedExchange {
 		bool stored = false;
 		// Try to update existing record for vehicle
 		for (int i = 0; i < ICS::MAX_VEHICLES; ++i) {
-			if (ics.vehicles[i].id == memberKnowledge.id) {
-				ics.vehicles[i] = memberKnowledge;
+			if (ics.vehicles.value[i].id == memberKnowledge.id) {
+				ics.vehicles.value[i] = memberKnowledge;
 				stored = true;
 				break;
 			}
@@ -37,8 +37,8 @@ namespace SpeedExchange {
 		// Try to store record in new field
 		if (!stored) {
 			for (int i = 0; i < ICS::MAX_VEHICLES; ++i) {
-				if (ics.vehicles[i].id == 0) {
-					ics.vehicles[i] = memberKnowledge;
+				if (ics.vehicles.value[i].id == 0) {
+					ics.vehicles.value[i] = memberKnowledge;
 					stored = true;
 					break;
 				}
@@ -56,8 +56,8 @@ namespace SpeedExchange {
 			const CDEECO::Id coordId, const ICS::Knowledge coordKnowledge) {
 		// Try to find desired arrival time in desired arrival time array
 		for (int i = 0; i < ICS::MAX_VEHICLES; ++i) {
-			if (coordKnowledge.speeds[i].id == member.id) {
-				return coordKnowledge.speeds[i].speed;
+			if (coordKnowledge.speedInfos.value[i].id == member.id) {
+				return coordKnowledge.speedInfos.value[i].speed;
 			}
 		}
 

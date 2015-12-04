@@ -42,7 +42,7 @@ namespace ICS {
 		} Vehicles;
 		
 		typedef struct {
-			SpeedInfo speeds[MAX_VEHICLES];
+			SpeedInfo value[MAX_VEHICLES];
 		} SpeedInfos;
 
 		/**
