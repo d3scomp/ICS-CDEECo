@@ -47,9 +47,6 @@ namespace Vehicle {
 	UpdateCrossingDistance::UpdateCrossingDistance(auto &component): component(component) {
 		// TODO: Period
 		PeriodicTask(1000, component, component.knowledge.crossingDistance);
-
-		// Reference to component
-		auto &component;
 	}
 
 	Distance UpdateCrossingDistance::run(const Knowledge in) {

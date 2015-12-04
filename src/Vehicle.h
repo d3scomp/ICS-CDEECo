@@ -132,6 +132,9 @@ namespace Vehicle {
 
 	private:
 		Distance run(const Knowledge in);
+		
+		// Reference to component
+		CDEECO::Component<Knowledge> &component;
 	};
 
 	/**

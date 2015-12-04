@@ -147,6 +147,9 @@ ${CDEECO_LIB}:
 	
 $(BUILD_DIR)/$(PROJ_ICS_NAME).elf: $(ICS_OBJS) ${CDEECO_LIB}
 	$(CXX) $(LDFLAGS) -o "$@" $(ICS_OBJS) ${CDEECO_LIB}
+	
+$(BUILD_DIR)/$(PROJ_VEHICLE_NAME).elf: $(VEHICLE_OBJS) ${CDEECO_LIB}
+	$(CXX) $(LDFLAGS) -o "$@" "$<"
 
 %.hex: %.elf
 	${OBJCOPY} -O ihex "$<" "$@"
