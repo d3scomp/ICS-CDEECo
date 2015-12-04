@@ -9,6 +9,7 @@
 #ifndef ICS_H
 #define ICS_H
 
+#include <set>
 #include <array>
 #include <algorithm>
 #include <climits>
