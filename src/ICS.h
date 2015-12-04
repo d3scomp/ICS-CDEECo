@@ -17,7 +17,7 @@
 #include "cdeeco/PeriodicTask.h"
 #include "cdeeco/TriggeredTask.h"
 
-#include "ics/Vehicle.h"
+#include "Vehicle.h"
 
 /**
  * CDEECO++ component handling intelligent cross-road

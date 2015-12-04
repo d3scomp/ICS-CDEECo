@@ -6,6 +6,12 @@ BUILD_DIR=build
 SRC_DIR=src
 CDEECO_DIR=cdeeco
 
+DRIVERS_DIR=${CDEECO_DIR}/src/drivers
+FREERTOS_DIR=${CDEECO_DIR}/FreeRTOS
+CMSIS_DIR=${CDEECO_DIR}/STM32F4xx_DSP_StdPeriph_Lib/Libraries/CMSIS
+CMSIS_DEVICE_DIR=${CMSIS_DIR}/Device/ST/STM32F4xx
+PERIPH_DIR=${CDEECO_DIR}/STM32F4xx_DSP_StdPeriph_Lib/Libraries/STM32F4xx_StdPeriph_Driver
+
 OPENOCD=openocd
 
 # Example project
@@ -76,15 +82,16 @@ AR=armv7m-hardfloat-eabi-ar
 # For some reason -O2 generates wrong code for interrupts. At least the USER_BUTTON interrupt handler get called twice
 CFLAGS  = -mcpu=cortex-m4 -g -Og -Wall -pipe
 CFLAGS += -mlittle-endian -mthumb -mthumb-interwork -mfloat-abi=hard -mfpu=fpv4-sp-d16 -MMD -MP -fsingle-precision-constant
+CFLAGS += -I$(CDEECO_DIR)
 CFLAGS += -I$(CDEECO_DIR)/src
 CFLAGS += -I$(CDEECO_DIR)/src/wrappers
 #CFLAGS += -I$(SRC_DIR)
-#CFLAGS += -I$(DRIVERS_DIR)
-#CFLAGS += -I${CMSIS_DEVICE_DIR}/Include
-#CFLAGS += -I$(CMSIS_DIR)/Include
-#CFLAGS += -I$(PERIPH_DIR)/inc
-#CFLAGS += -I$(FREERTOS_DIR)/Source/include
-#CFLAGS += -I$(FREERTOS_DIR)/Source/portable/GCC/ARM_CM4F
+CFLAGS += -I$(DRIVERS_DIR)
+CFLAGS += -I${CMSIS_DEVICE_DIR}/Include
+CFLAGS += -I$(CMSIS_DIR)/Include
+CFLAGS += -I$(PERIPH_DIR)/inc
+CFLAGS += -I$(FREERTOS_DIR)/Source/include
+CFLAGS += -I$(FREERTOS_DIR)/Source/portable/GCC/ARM_CM4F
 
 # Setup hardware using defines
 CFLAGS += -D USE_STDPERIPH_DRIVER -D STM32F40_41xxx -D HSI_VALUE=16000000ul -D HSE_VALUE=8000000ul
