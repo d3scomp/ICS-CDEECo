@@ -1,3 +1,6 @@
 [submodule "cdeeco"]
 	path = cdeeco
 	url = https://github.com/d3scomp/CDEECo.git
+[submodule "network-simulation"]
+	path = network-simulation
+	url = https://github.com/mkit/Simulation.git
