@@ -114,7 +114,10 @@ clean:
 openocd:
 	${OPENOCD} -f interface/stlink-v2.cfg -f target/stm32f4x_stlink.cfg
 
-flash: $(BUILD_DIR)/$(PROJ_EXAMPLE_NAME).hex
-	${OPENOCD} -f board/stm32f4discovery.cfg -c "program $(BUILD_DIR)/$(PROJ_EXAMPLE_NAME).elf verify reset"
+flash-ics: $(BUILD_DIR)/$(PROJ_ICS_NAME).hex
+	${OPENOCD} -f board/stm32f4discovery.cfg -c "program $(BUILD_DIR)/$(PROJ_ICS_NAME).elf verify reset"
+	
+flash-vehicle: $(BUILD_DIR)/$(PROJ_VEHICLE_NAME).hex
+	${OPENOCD} -f board/stm32f4discovery.cfg -c "program $(BUILD_DIR)/$(PROJ_VEHICLE_NAME).elf verify reset"
 
 -include $(DEPS)
